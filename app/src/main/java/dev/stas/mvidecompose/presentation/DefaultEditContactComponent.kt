@@ -1,5 +1,7 @@
 package dev.stas.mvidecompose.presentation
 
+import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.statekeeper.consume
 import dev.stas.mvidecompose.data.RepositoryImpl
 import dev.stas.mvidecompose.domain.Contact
 import dev.stas.mvidecompose.domain.EditContactUseCase
@@ -8,15 +10,21 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class DefaultEditContactComponent(
+    componentContext: ComponentContext,
     private val contact: Contact
-) : EditContactComponent {
+) : EditContactComponent, ComponentContext by componentContext {
 
     private val repository = RepositoryImpl
     private val editContactUseCase = EditContactUseCase(repository)
 
+    init {
+        stateKeeper.register(KEY){
+            model.value
+        }
+    }
 
     private val _model = MutableStateFlow(
-        EditContactComponent.Model(
+        stateKeeper.consume(KEY) ?: EditContactComponent.Model(
             username = contact.username,
             phone = contact.phone,
         )
@@ -40,5 +48,9 @@ class DefaultEditContactComponent(
                 phone = phone
             )
         )
+    }
+
+    companion object {
+        private const val KEY = "DefaultEditContactComponent"
     }
 }
