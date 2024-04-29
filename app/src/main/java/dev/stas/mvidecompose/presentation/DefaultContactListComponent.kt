@@ -1,6 +1,8 @@
 package dev.stas.mvidecompose.presentation
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.value.MutableValue
+import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.instancekeeper.InstanceKeeper
 import com.arkivanov.essenty.instancekeeper.getOrCreate
 import dev.stas.mvidecompose.core.componentScope
@@ -24,6 +26,9 @@ class DefaultContactListComponent(
     private val getContactsUseCase = GetContactsUseCase(repository)
     private val scope = componentScope()
 
+    private val _state = MutableValue(State())
+    val state: Value<State> = _state
+
     override val model: StateFlow<ContactListComponent.Model> =
         getContactsUseCase()
             .map { ContactListComponent.Model(it) }
@@ -42,9 +47,20 @@ class DefaultContactListComponent(
     }
 }
 
+data class State(val count: Int = 0)
+
 private class FakeViewModel(): InstanceKeeper.Instance {
 
     override fun onDestroy() {
         super.onDestroy()
     }
 }
+
+/**
+ * CC
+ *
+ * LifecycleOwner, предоставляемый библиотекой Essenty, поэтому каждый компонент имеет собственный жизненный цикл.
+ * StateKeeperOwner, предоставляемый библиотекой Essenty, поэтому вы можете сохранить любое состояние во время изменений конфигурации и/или смерти процесса.
+ * InstanceKeeperOwner, предоставляемый библиотекой Essenty, поэтому вы можете сохранять произвольные экземпляры объектов в своих компонентах (например, в AndroidX ViewModels).
+ * BackHandlerOwner, предоставляемый библиотекой Essenty, поэтому каждый компонент может обрабатывать события кнопки «Назад».
+ * */
