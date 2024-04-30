@@ -2,7 +2,6 @@ package dev.stas.mvidecompose.ui.content
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,19 +28,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import dev.stas.mvidecompose.domain.Contact
-import dev.stas.mvidecompose.presentation_legacy.ContactListViewModel
+import dev.stas.mvidecompose.presentation.ContactListComponent
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Contacts(
-    onAddContactClick: () -> Unit,
-    onContactClick: (Contact) -> Unit,
-    onContactDelete: (Contact) -> Unit
+    component: ContactListComponent
 ) {
-    val viewModel: ContactListViewModel = viewModel()
-    val contacts by viewModel.contacts.collectAsState()
+    val model by component.model.collectAsState()
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -52,7 +46,7 @@ fun Contacts(
             contentPadding = PaddingValues(8.dp)
         ) {
             items(
-                items = contacts,
+                items = model.contactList,
                 key = {
                     it.id
                 },
@@ -61,12 +55,8 @@ fun Contacts(
                     modifier = Modifier
                         .combinedClickable (
                             onClick = {
-                                onContactClick(it)
+                                component.onContactClick(it)
                             },
-                            onDoubleClick = {
-                                viewModel.removeContact(it)
-                                onContactDelete(it)
-                            }
                         ),
                     username = it.username,
                     phone = it.phone
@@ -79,7 +69,7 @@ fun Contacts(
                 .padding(16.dp),
             containerColor = MaterialTheme.colorScheme.tertiary,
             onClick = {
-                onAddContactClick()
+                component.onAddContactClicked()
             }
         ) {
             Image(

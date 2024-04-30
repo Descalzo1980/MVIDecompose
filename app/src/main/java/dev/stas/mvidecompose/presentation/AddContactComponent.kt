@@ -1,7 +1,6 @@
 package dev.stas.mvidecompose.presentation
 
 import com.arkivanov.essenty.parcelable.Parcelable
-import com.arkivanov.essenty.parcelable.Parceler
 import com.arkivanov.essenty.parcelable.Parcelize
 import kotlinx.coroutines.flow.StateFlow
 
@@ -16,6 +15,6 @@ interface AddContactComponent {
     @Parcelize
     data class Model(
         val username: String,
-        val phone: String
+        var phone: String
     ): Parcelable
 }

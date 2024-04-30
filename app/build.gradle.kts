@@ -70,4 +70,6 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     implementation ("com.arkivanov.decompose:decompose:2.1.2")
+
+    implementation("com.arkivanov.decompose:extensions-compose-jetbrains:2.1.2")
 }
