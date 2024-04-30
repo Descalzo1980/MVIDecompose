@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
 import dev.stas.mvidecompose.presentation.DefaultRootComponent
+import dev.stas.mvidecompose.presentation.RootComponent
 import dev.stas.mvidecompose.ui.theme.MVIDecomposeTheme
 
 @Composable
@@ -21,13 +22,13 @@ fun RootContent(
             ) {
                 when(val instance = it.instance){
 
-                    is DefaultRootComponent.Child.AddContact -> {
+                    is RootComponent.Child.AddContact -> {
                         AddContact(component = instance.component)
                     }
-                    is DefaultRootComponent.Child.ContactList -> {
+                    is RootComponent.Child.ContactList -> {
                         Contacts(component = instance.component)
                     }
-                    is DefaultRootComponent.Child.EditContact -> {
+                    is RootComponent.Child.EditContact -> {
                         EditContact(component = instance.component)
                     }
                 }

@@ -1,7 +1,6 @@
 package dev.stas.mvidecompose.presentation
 
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
@@ -9,8 +8,8 @@ import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.parcelable.Parcelable
-import com.arkivanov.essenty.parcelable.Parcelize
 import dev.stas.mvidecompose.domain.Contact
+import kotlinx.parcelize.Parcelize
 
 class DefaultRootComponent(
     componentContext: ComponentContext
@@ -18,7 +17,7 @@ class DefaultRootComponent(
 
     private val navigation = StackNavigation<Config>()
 
-    val stack: Value<ChildStack<Config,Child>> = childStack(
+    override val stack: Value<ChildStack<*, RootComponent.Child>> = childStack(
         source = navigation,
         initialConfiguration = Config.ContactList,
         handleBackButton = true,
@@ -28,7 +27,7 @@ class DefaultRootComponent(
     private fun child(
         config: Config,
         componentContext: ComponentContext
-    ): Child {
+    ): RootComponent.Child {
         return when (config) {
             Config.AddContact -> {
                 val component = DefaultAddContactComponent(
@@ -37,7 +36,7 @@ class DefaultRootComponent(
                         navigation.pop()
                     }
                 )
-                Child.AddContact(component)
+                RootComponent.Child.AddContact(component)
             }
 
             Config.ContactList -> {
@@ -50,7 +49,7 @@ class DefaultRootComponent(
                         navigation.push(Config.EditContact(it))
                     }
                 )
-                Child.ContactList(component)
+                RootComponent.Child.ContactList(component)
             }
 
             is Config.EditContact -> {
@@ -61,21 +60,12 @@ class DefaultRootComponent(
                         navigation.pop()
                     }
                 )
-                Child.EditContact(component)
+                RootComponent.Child.EditContact(component)
             }
         }
     }
 
-    sealed interface Child {
-
-        class AddContact(val component: AddContactComponent): Child
-
-        class ContactList(val component: ContactListComponent): Child
-
-        class EditContact(val component: EditContactComponent): Child
-    }
-
-    sealed interface Config : Parcelable {
+    private sealed interface Config : Parcelable {
         @Parcelize
         data object ContactList : Config
 
