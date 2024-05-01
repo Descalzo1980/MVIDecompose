@@ -1,9 +1,10 @@
-package dev.stas.mvidecompose.presentation.component
+package dev.stas.mvidecompose.presentation.component.addContactComponent
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import dev.stas.mvidecompose.core.componentScope
+import dev.stas.mvidecompose.presentation.factory.AddContactStoreFactory
 import dev.stas.mvidecompose.presentation.store.AddContactStore
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
@@ -14,8 +15,8 @@ class DefaultAddContactComponent(
     private val onContactSaved: () -> Unit,
 ) : AddContactComponent, ComponentContext by componentContext {
 
-
-    private lateinit var store: AddContactStore
+    private val storeFactory = AddContactStoreFactory()
+    private val store: AddContactStore = storeFactory.create()
 
     init {
         componentScope().launch {

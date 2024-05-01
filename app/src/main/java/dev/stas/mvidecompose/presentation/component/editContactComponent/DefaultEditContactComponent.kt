@@ -1,10 +1,11 @@
-package dev.stas.mvidecompose.presentation.component
+package dev.stas.mvidecompose.presentation.component.editContactComponent
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import dev.stas.mvidecompose.core.componentScope
 import dev.stas.mvidecompose.domain.Contact
+import dev.stas.mvidecompose.presentation.factory.EditContactStoreFactory
 import dev.stas.mvidecompose.presentation.store.EditContactStore
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +17,8 @@ class DefaultEditContactComponent(
     private val onContactSaved: () -> Unit
 ) : EditContactComponent, ComponentContext by componentContext {
 
-    private lateinit var store: EditContactStore
+    private val storeFactory = EditContactStoreFactory()
+    private val store: EditContactStore = storeFactory.create(contact)
 
     init {
         componentScope().launch {

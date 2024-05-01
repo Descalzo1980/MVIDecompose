@@ -1,4 +1,4 @@
-package dev.stas.mvidecompose.presentation.component
+package dev.stas.mvidecompose.presentation.component.rootComponent
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
@@ -9,6 +9,9 @@ import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.parcelable.Parcelable
 import dev.stas.mvidecompose.domain.Contact
+import dev.stas.mvidecompose.presentation.component.addContactComponent.DefaultAddContactComponent
+import dev.stas.mvidecompose.presentation.component.contactListComponent.DefaultContactListComponent
+import dev.stas.mvidecompose.presentation.component.editContactComponent.DefaultEditContactComponent
 import kotlinx.parcelize.Parcelize
 
 class DefaultRootComponent(
