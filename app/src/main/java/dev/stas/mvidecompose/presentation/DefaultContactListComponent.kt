@@ -1,18 +1,13 @@
 package dev.stas.mvidecompose.presentation
 
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.value.MutableValue
-import com.arkivanov.decompose.value.Value
-import com.arkivanov.essenty.instancekeeper.InstanceKeeper
-import com.arkivanov.essenty.instancekeeper.getOrCreate
+import com.arkivanov.mvikotlin.extensions.coroutines.labels
+import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import dev.stas.mvidecompose.core.componentScope
-import dev.stas.mvidecompose.data.RepositoryImpl
 import dev.stas.mvidecompose.domain.Contact
-import dev.stas.mvidecompose.domain.GetContactsUseCase
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class DefaultContactListComponent(
     componentContext: ComponentContext,
@@ -20,41 +15,36 @@ class DefaultContactListComponent(
     val onAddContactRequested: () -> Unit,
 ) : ContactListComponent, ComponentContext by componentContext {
 
-    private val viewModel = instanceKeeper.getOrCreate { FakeViewModel() }
+    private lateinit var store: ContactListStore
 
-    private val repository = RepositoryImpl
-    private val getContactsUseCase = GetContactsUseCase(repository)
-    private val scope = componentScope()
+    init {
+        componentScope().launch {
+            store.labels.collect{
+                when(it) {
+                    ContactListStore.Label.AddContact -> {
+                        onAddContactRequested()
+                    }
+                    is ContactListStore.Label.EditContact -> {
+                        onEditingContactRequested(it.contact)
+                    }
+                }
+            }
+        }
+    }
 
-    private val _state = MutableValue(State())
-    val state: Value<State> = _state
-
-    override val model: StateFlow<ContactListComponent.Model> =
-        getContactsUseCase()
-            .map { ContactListComponent.Model(it) }
-            .stateIn(
-                scope = scope,
-                started = SharingStarted.Lazily,
-                initialValue = ContactListComponent.Model(listOf())
-            )
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val model: StateFlow<ContactListStore.State>
+        get() = store.stateFlow
 
     override fun onContactClick(contact: Contact) {
-        onEditingContactRequested(contact)
+        store.accept(ContactListStore.Intent.SelectContact(contact))
     }
 
     override fun onAddContactClicked() {
-        onAddContactRequested()
+        store.accept(ContactListStore.Intent.AddContact)
     }
 }
 
-data class State(val count: Int = 0)
-
-private class FakeViewModel(): InstanceKeeper.Instance {
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-}
 
 /**
  * CC

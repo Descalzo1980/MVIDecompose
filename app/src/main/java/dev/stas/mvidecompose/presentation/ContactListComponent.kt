@@ -1,19 +1,13 @@
 package dev.stas.mvidecompose.presentation
 
-import com.arkivanov.essenty.parcelable.Parcelable
-import com.arkivanov.essenty.parcelable.Parcelize
 import dev.stas.mvidecompose.domain.Contact
 import kotlinx.coroutines.flow.StateFlow
 
 interface ContactListComponent {
 
-    val model: StateFlow<Model>
+    val model: StateFlow<ContactListStore.State>
 
     fun onContactClick(contact: Contact)
 
     fun onAddContactClicked()
-    @Parcelize
-    data class Model(
-        val contactList: List<Contact>
-    ): Parcelable
 }
