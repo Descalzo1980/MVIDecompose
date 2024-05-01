@@ -1,26 +1,28 @@
-package dev.stas.mvidecompose.presentation
+package dev.stas.mvidecompose.presentation.component
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import dev.stas.mvidecompose.core.componentScope
+import dev.stas.mvidecompose.domain.Contact
+import dev.stas.mvidecompose.presentation.store.EditContactStore
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class DefaultAddContactComponent(
+class DefaultEditContactComponent(
     componentContext: ComponentContext,
-    private val onContactSaved: () -> Unit,
-) : AddContactComponent, ComponentContext by componentContext {
+    private val contact: Contact,
+    private val onContactSaved: () -> Unit
+) : EditContactComponent, ComponentContext by componentContext {
 
-
-    private lateinit var store: AddContactStore
+    private lateinit var store: EditContactStore
 
     init {
         componentScope().launch {
-            store.labels.collect{
+            store.labels.collect {
                 when(it) {
-                    AddContactStore.Label.ContactSaved -> {
+                    EditContactStore.Label.ContactSaved -> {
                         onContactSaved()
                     }
                 }
@@ -29,19 +31,18 @@ class DefaultAddContactComponent(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val model: StateFlow<AddContactStore.State>
+    override val model: StateFlow<EditContactStore.State>
         get() = store.stateFlow
 
-
     override fun onUserNameChange(username: String) {
-        store.accept(AddContactStore.Intent.ChangeUserName(username))
+        store.accept(EditContactStore.Intent.ChangeUsername(username))
     }
 
     override fun onPhoneChange(phone: String) {
-        store.accept(AddContactStore.Intent.ChangePhone(phone))
+        store.accept(EditContactStore.Intent.ChangePhone(phone))
     }
 
     override fun onSaveContactClicked() {
-        store.accept(AddContactStore.Intent.SaveContact)
+        store.accept(EditContactStore.Intent.SaveContact)
     }
 }

@@ -1,10 +1,11 @@
-package dev.stas.mvidecompose.presentation
+package dev.stas.mvidecompose.presentation.component
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import dev.stas.mvidecompose.core.componentScope
 import dev.stas.mvidecompose.domain.Contact
+import dev.stas.mvidecompose.presentation.store.ContactListStore
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

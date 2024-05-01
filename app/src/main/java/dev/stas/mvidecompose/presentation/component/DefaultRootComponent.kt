@@ -1,4 +1,4 @@
-package dev.stas.mvidecompose.presentation
+package dev.stas.mvidecompose.presentation.component
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack

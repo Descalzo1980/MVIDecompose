@@ -1,9 +1,9 @@
-package dev.stas.mvidecompose.presentation
+package dev.stas.mvidecompose.presentation.store
 
 import com.arkivanov.mvikotlin.core.store.Store
 import dev.stas.mvidecompose.domain.Contact
 
-interface ContactListStore: Store<ContactListStore.Intent,ContactListStore.State, ContactListStore.Label> {
+interface ContactListStore: Store<ContactListStore.Intent, ContactListStore.State, ContactListStore.Label> {
 
     data class State(
         val contactList: List<Contact>

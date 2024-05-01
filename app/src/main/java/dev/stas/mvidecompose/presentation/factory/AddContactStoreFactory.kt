@@ -1,23 +1,25 @@
-package dev.stas.mvidecompose.presentation
+package dev.stas.mvidecompose.presentation.factory
 
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import dev.stas.mvidecompose.domain.AddContactUseCase
+import dev.stas.mvidecompose.presentation.store.AddContactStore
 
 class AddContactStoreFactory(
     private val storeFactory: StoreFactory,
     private val addContactUseCase: AddContactUseCase
 ) {
 
-    private val store: Store<AddContactStore.Intent, AddContactStore.State, AddContactStore.Label> =
-        storeFactory.create(
-            name = "AddContactStore",
-            initialState = AddContactStore.State("", ""),
-            reducer = ReducerImpl,
-            executorFactory = ::ExecutorImpl
-        )
+    fun create(): AddContactStore = object : AddContactStore,
+        Store<AddContactStore.Intent, AddContactStore.State, AddContactStore.Label> by
+            storeFactory.create(
+                name = "AddContactStore",
+                initialState = AddContactStore.State("", ""),
+                reducer = ReducerImpl,
+                executorFactory = ::ExecutorImpl
+            ){}
 
     private sealed interface Action
 
@@ -63,14 +65,3 @@ class AddContactStoreFactory(
         }
     }
 }
-/*        override fun AddContactStore.State.reduce(msg: Msg): AddContactStore.State {
-            val oldState = this
-            return when(msg){
-                is Msg.ChangePhone -> {
-                    oldState.copy(phone = msg.phone)
-                }
-                is Msg.ChangeUserName -> {
-                    oldState.copy(phone = msg.username)
-                }
-            }
-        }* это одно и то же/ */

@@ -15,8 +15,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.stas.mvidecompose.presentation.AddContactComponent
-import dev.stas.mvidecompose.presentation.EditContactComponent
+import dev.stas.mvidecompose.presentation.component.AddContactComponent
+import dev.stas.mvidecompose.presentation.component.EditContactComponent
 
 
 @Composable

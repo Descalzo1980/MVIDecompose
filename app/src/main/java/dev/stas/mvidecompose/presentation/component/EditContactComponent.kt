@@ -1,5 +1,6 @@
-package dev.stas.mvidecompose.presentation
+package dev.stas.mvidecompose.presentation.component
 
+import dev.stas.mvidecompose.presentation.store.EditContactStore
 import kotlinx.coroutines.flow.StateFlow
 
 interface EditContactComponent {
