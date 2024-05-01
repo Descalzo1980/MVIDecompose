@@ -8,6 +8,7 @@ import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import dev.stas.mvidecompose.data.RepositoryImpl
 import dev.stas.mvidecompose.domain.AddContactUseCase
+import dev.stas.mvidecompose.presentation.store.AddContactStore
 
 class AddContactStoreFactory {
 
