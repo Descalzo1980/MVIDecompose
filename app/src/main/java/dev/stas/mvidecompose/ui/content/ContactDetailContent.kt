@@ -15,8 +15,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.stas.mvidecompose.presentation.component.addContactComponent.AddContactComponent
-import dev.stas.mvidecompose.presentation.component.editContactComponent.EditContactComponent
+import dev.stas.mvidecompose.presentation.AddContactComponent
+import dev.stas.mvidecompose.presentation.EditContactComponent
 
 
 @Composable
@@ -38,7 +38,7 @@ fun AddContact(
             placeholder = {
                 Text(text = "Username:")
             },
-            onValueChange = { component.onUserNameChange(it) }
+            onValueChange = { component.onUsernameChanged(it) }
         )
         TextField(
             modifier = Modifier.fillMaxWidth(),
@@ -46,7 +46,7 @@ fun AddContact(
             placeholder = {
                 Text(text = "Phone:")
             },
-            onValueChange = { component.onPhoneChange(it) }
+            onValueChange = { component.onPhoneChanged(it) }
         )
         Button(
             modifier = Modifier.fillMaxWidth(),
@@ -78,7 +78,7 @@ fun EditContact(
             placeholder = {
                 Text(text = "Username:")
             },
-            onValueChange = { component.onUserNameChange(it) }
+            onValueChange = { component.onUsernameChanged(it) }
         )
         TextField(
             modifier = Modifier.fillMaxWidth(),
@@ -86,7 +86,7 @@ fun EditContact(
             placeholder = {
                 Text(text = "Phone:")
             },
-            onValueChange = { component.onPhoneChange(it) }
+            onValueChange = { component.onPhoneChanged(it) }
         )
         Button(
             modifier = Modifier.fillMaxWidth(),

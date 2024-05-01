@@ -1,4 +1,4 @@
-package dev.stas.mvidecompose.presentation.factory
+package dev.stas.mvidecompose.presentation
 
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
@@ -7,7 +7,6 @@ import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import dev.stas.mvidecompose.data.RepositoryImpl
 import dev.stas.mvidecompose.domain.AddContactUseCase
-import dev.stas.mvidecompose.presentation.store.AddContactStore
 
 class AddContactStoreFactory {
 
@@ -16,39 +15,40 @@ class AddContactStoreFactory {
     private val addContactUseCase = AddContactUseCase(repository)
 
     fun create(): AddContactStore = object : AddContactStore,
-        Store<AddContactStore.Intent, AddContactStore.State, AddContactStore.Label> by
-            storeFactory.create(
-                name = "AddContactStore",
-                initialState = AddContactStore.State("", ""),
-                reducer = ReducerImpl,
-                executorFactory = ::ExecutorImpl
-            ){}
+        Store<AddContactStore.Intent, AddContactStore.State, AddContactStore.Label> by storeFactory.create(
+            name = "AddContactStore",
+            initialState = AddContactStore.State(username = "", phone = ""),
+            reducer = ReducerImpl,
+            executorFactory = ::ExecutorImpl
+        ) {}
 
     private sealed interface Action
 
     private sealed interface Msg {
-        data class ChangeUserName(val username: String) : Msg
+        data class ChangeUsername(val username: String) : Msg
+
         data class ChangePhone(val phone: String) : Msg
     }
 
-    private inner class ExecutorImpl :
-        CoroutineExecutor<AddContactStore.Intent, Action, AddContactStore.State, Msg, AddContactStore.Label>() {
+    private inner class ExecutorImpl : CoroutineExecutor<AddContactStore.Intent, Action,
+            AddContactStore.State, Msg, AddContactStore.Label>() {
+
         override fun executeIntent(
             intent: AddContactStore.Intent,
             getState: () -> AddContactStore.State
         ) {
             when (intent) {
                 is AddContactStore.Intent.ChangePhone -> {
-                    dispatch(Msg.ChangePhone(intent.phone))
+                    dispatch(Msg.ChangePhone(phone = intent.phone))
                 }
 
-                is AddContactStore.Intent.ChangeUserName -> {
-                    dispatch(Msg.ChangeUserName(intent.username))
+                is AddContactStore.Intent.ChangeUsername -> {
+                    dispatch(Msg.ChangeUsername(username = intent.username))
                 }
 
                 AddContactStore.Intent.SaveContact -> {
                     val state = getState()
-                    addContactUseCase(state.username,state.phone)
+                    addContactUseCase(state.username, state.phone)
                     publish(AddContactStore.Label.ContactSaved)
                 }
             }
@@ -62,8 +62,8 @@ class AddContactStoreFactory {
                 copy(phone = msg.phone)
             }
 
-            is Msg.ChangeUserName -> {
-                copy(phone = msg.username)
+            is Msg.ChangeUsername -> {
+                copy(username = msg.username)
             }
         }
     }

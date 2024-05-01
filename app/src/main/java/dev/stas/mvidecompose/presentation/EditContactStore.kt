@@ -1,4 +1,4 @@
-package dev.stas.mvidecompose.presentation.store
+package dev.stas.mvidecompose.presentation
 
 import com.arkivanov.mvikotlin.core.store.Store
 

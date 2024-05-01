@@ -1,27 +1,28 @@
-package dev.stas.mvidecompose.presentation.component.addContactComponent
+package dev.stas.mvidecompose.presentation
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import dev.stas.mvidecompose.core.componentScope
-import dev.stas.mvidecompose.presentation.factory.AddContactStoreFactory
-import dev.stas.mvidecompose.presentation.store.AddContactStore
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class DefaultAddContactComponent(
     componentContext: ComponentContext,
-    private val onContactSaved: () -> Unit,
+    val onContactSaved: () -> Unit
 ) : AddContactComponent, ComponentContext by componentContext {
 
-    private val storeFactory = AddContactStoreFactory()
-    private val store: AddContactStore = storeFactory.create()
+    private val store: AddContactStore = instanceKeeper.getStore {
+        val storeFactory = AddContactStoreFactory()
+        storeFactory.create()
+    }
 
     init {
         componentScope().launch {
-            store.labels.collect{
-                when(it) {
+            store.labels.collect {
+                when (it) {
                     AddContactStore.Label.ContactSaved -> {
                         onContactSaved()
                     }
@@ -34,12 +35,11 @@ class DefaultAddContactComponent(
     override val model: StateFlow<AddContactStore.State>
         get() = store.stateFlow
 
-
-    override fun onUserNameChange(username: String) {
-        store.accept(AddContactStore.Intent.ChangeUserName(username))
+    override fun onUsernameChanged(username: String) {
+        store.accept(AddContactStore.Intent.ChangeUsername(username))
     }
 
-    override fun onPhoneChange(phone: String) {
+    override fun onPhoneChanged(phone: String) {
         store.accept(AddContactStore.Intent.ChangePhone(phone))
     }
 

@@ -1,4 +1,4 @@
-package dev.stas.mvidecompose.presentation.factory
+package dev.stas.mvidecompose.presentation
 
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
@@ -8,7 +8,6 @@ import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import dev.stas.mvidecompose.data.RepositoryImpl
 import dev.stas.mvidecompose.domain.Contact
 import dev.stas.mvidecompose.domain.EditContactUseCase
-import dev.stas.mvidecompose.presentation.store.EditContactStore
 
 class EditContactStoreFactory(
 

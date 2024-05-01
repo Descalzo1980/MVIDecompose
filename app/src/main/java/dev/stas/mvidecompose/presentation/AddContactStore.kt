@@ -1,8 +1,9 @@
-package dev.stas.mvidecompose.presentation.store
+package dev.stas.mvidecompose.presentation
 
 import com.arkivanov.mvikotlin.core.store.Store
 
-interface AddContactStore: Store<AddContactStore.Intent, AddContactStore.State, AddContactStore.Label> {
+interface AddContactStore :
+    Store<AddContactStore.Intent, AddContactStore.State, AddContactStore.Label> {
 
     data class State(
         val username: String,
@@ -10,13 +11,17 @@ interface AddContactStore: Store<AddContactStore.Intent, AddContactStore.State, 
     )
 
     sealed interface Label {
-        data object ContactSaved: Label
+
+        object ContactSaved : Label
     }
 
     sealed interface Intent {
-        data class ChangeUserName(val username: String): Intent
-        data class ChangePhone(val phone: String): Intent
-        data object SaveContact: Intent
+
+        data class ChangeUsername(val username: String) : Intent
+
+        data class ChangePhone(val phone: String) : Intent
+
+        object SaveContact : Intent
     }
 }
 

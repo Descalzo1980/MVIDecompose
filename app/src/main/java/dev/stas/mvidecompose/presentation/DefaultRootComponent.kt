@@ -1,4 +1,4 @@
-package dev.stas.mvidecompose.presentation.component.rootComponent
+package dev.stas.mvidecompose.presentation
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
@@ -9,9 +9,6 @@ import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.parcelable.Parcelable
 import dev.stas.mvidecompose.domain.Contact
-import dev.stas.mvidecompose.presentation.component.addContactComponent.DefaultAddContactComponent
-import dev.stas.mvidecompose.presentation.component.contactListComponent.DefaultContactListComponent
-import dev.stas.mvidecompose.presentation.component.editContactComponent.DefaultEditContactComponent
 import kotlinx.parcelize.Parcelize
 
 class DefaultRootComponent(
@@ -29,7 +26,7 @@ class DefaultRootComponent(
 
     private fun child(
         config: Config,
-        componentContext: ComponentContext
+        componentContext: ComponentContext,
     ): RootComponent.Child {
         return when (config) {
             Config.AddContact -> {
@@ -49,7 +46,7 @@ class DefaultRootComponent(
                         navigation.push(Config.AddContact)
                     },
                     onEditingContactRequested = {
-                        navigation.push(Config.EditContact(it))
+                        navigation.push(Config.EditContact(contact = it))
                     }
                 )
                 RootComponent.Child.ContactList(component)
@@ -69,11 +66,12 @@ class DefaultRootComponent(
     }
 
     private sealed interface Config : Parcelable {
-        @Parcelize
-        data object ContactList : Config
 
         @Parcelize
-        data object AddContact : Config
+        object ContactList : Config
+
+        @Parcelize
+        object AddContact : Config
 
         @Parcelize
         data class EditContact(val contact: Contact) : Config
