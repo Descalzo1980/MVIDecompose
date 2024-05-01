@@ -1,5 +1,6 @@
-package dev.stas.mvidecompose.presentation.factory
+package dev.stas.mvidecompose.presentation
 
+import android.util.Log
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
@@ -8,7 +9,6 @@ import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import dev.stas.mvidecompose.data.RepositoryImpl
 import dev.stas.mvidecompose.domain.Contact
 import dev.stas.mvidecompose.domain.EditContactUseCase
-import dev.stas.mvidecompose.presentation.store.EditContactStore
 
 class EditContactStoreFactory(
 
@@ -25,7 +25,10 @@ class EditContactStoreFactory(
                 phone = contact.phone),
             reducer = ReducerImpl,
             executorFactory = ::ExecutorImpl
-    ){}
+    ){}.apply {
+        Log.d("STORE_FACTORY", "EditContactStoreFactory")
+    }
+
 
     private sealed interface Action
 

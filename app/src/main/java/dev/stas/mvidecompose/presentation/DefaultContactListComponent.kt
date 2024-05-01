@@ -1,12 +1,11 @@
-package dev.stas.mvidecompose.presentation.component.contactListComponent
+package dev.stas.mvidecompose.presentation
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import dev.stas.mvidecompose.core.componentScope
 import dev.stas.mvidecompose.domain.Contact
-import dev.stas.mvidecompose.presentation.factory.ContactListStoreFactory
-import dev.stas.mvidecompose.presentation.store.ContactListStore
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -14,19 +13,22 @@ import kotlinx.coroutines.launch
 class DefaultContactListComponent(
     componentContext: ComponentContext,
     val onEditingContactRequested: (Contact) -> Unit,
-    val onAddContactRequested: () -> Unit,
+    val onAddContactRequested: () -> Unit
 ) : ContactListComponent, ComponentContext by componentContext {
 
-    private val storeFactory = ContactListStoreFactory()
-    private val store: ContactListStore = storeFactory.create()
+    private val store: ContactListStore = instanceKeeper.getStore {
+        val storeFactory = ContactListStoreFactory()
+        storeFactory.create()
+    }
 
     init {
         componentScope().launch {
-            store.labels.collect{
-                when(it) {
+            store.labels.collect {
+                when (it) {
                     ContactListStore.Label.AddContact -> {
                         onAddContactRequested()
                     }
+
                     is ContactListStore.Label.EditContact -> {
                         onEditingContactRequested(it.contact)
                     }
@@ -39,7 +41,7 @@ class DefaultContactListComponent(
     override val model: StateFlow<ContactListStore.State>
         get() = store.stateFlow
 
-    override fun onContactClick(contact: Contact) {
+    override fun onContactClicked(contact: Contact) {
         store.accept(ContactListStore.Intent.SelectContact(contact))
     }
 

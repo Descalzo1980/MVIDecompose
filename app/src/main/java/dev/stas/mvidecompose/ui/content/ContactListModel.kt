@@ -28,7 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dev.stas.mvidecompose.presentation.component.contactListComponent.ContactListComponent
+import dev.stas.mvidecompose.presentation.ContactListComponent
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -55,7 +55,7 @@ fun Contacts(
                     modifier = Modifier
                         .combinedClickable (
                             onClick = {
-                                component.onContactClick(it)
+                                component.onContactClicked(it)
                             },
                         ),
                     username = it.username,
